@@ -5,7 +5,7 @@ Research code for SAMoSA: Sensing Activities with Motion and Subsampled Audio (U
 ## Reference
 Vimal Mollyn, Karan Ahuja, Dhruv Verma, Chris Harrison, and Mayank Goel. 2022. SAMoSA: Sensing Activities with Motion and Subsampled Audio. Proc. ACM Interact. Mob. Wearable Ubiquitous Technol. 6, 3, Article 132 (September 2022), 19 pages. https://doi.org/10.1145/3550284
 
-[Download the Paper Here.](http://smashlab.io/pdfs/samosa.pdf) 
+[Download Paper Here.](http://smashlab.io/pdfs/samosa.pdf) 
 
 BibTeX Reference: 
 ```
@@ -34,7 +34,7 @@ git clone https://github.com/cmusmashlab/SAMoSA.git
 ```
 
 ## 2. Create a virtual environment
-We recommend using conda as follows.
+We recommend using conda. Tested on `Ubuntu 20.04`, with `python 3.8`.
 
 ```
 conda create -n "samosa" python=3.8.3
