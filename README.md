@@ -51,4 +51,17 @@ Data/
 └── TrainingDataset
 ```
 
-29 directories, 2 files
+Each file in the `TrainingDataset` folder contains synchronized Audio and IMU data. **Describe in detail** -> audio data, plus which axes are what for IMU data.
+
+## 4. Download Models
+Download the `Models` folder from [UPDATE THIS LINK!](http://smashlab.io/pdfs/samosa.pdf) and place in `SAMoSA/Models`. It should have the following tree structure.
+```bash
+Models/
+├── Motion
+├── MotionSound
+│   ├── 1000
+│   └── 16000
+└── Sound
+    ├── 1000
+    └── 16000
+```
