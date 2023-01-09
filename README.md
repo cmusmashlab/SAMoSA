@@ -51,7 +51,18 @@ Data/
 └── TrainingDataset
 ```
 
-Each file in the `TrainingDataset` folder contains synchronized Audio and IMU data. **Describe in detail** -> audio data, plus which axes are what for IMU data.
+Each file in the `TrainingDataset` folder contains synchronized Audio and IMU data.  
+The file name contains all the information regarding the contents of the file.  
+
+For example:  
+`49---Kitchen---Chopping---1.pkl`  
+
+Participant ID: 49, Context: Kitchen, Activity: Chopping, TrialNo: 1
+
+Each pickle file has the `Audio` and `IMU` keys.  
+    - Audio contains a 1D array of audio data, sampled at 16kHz
+    - # IMU is a 2D array of (N\_Samples, 9 axes) Sampled at ~50Hz
+    - Refer to [this notebook]("Code/0. Dataset Intro.ipynb") for more information.
 
 ## 4. Download Models
 Download the `Models` folder from [UPDATE THIS LINK!](http://smashlab.io/pdfs/samosa.pdf) and place in `SAMoSA/Models`. It should have the following tree structure.
