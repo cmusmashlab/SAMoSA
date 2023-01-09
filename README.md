@@ -78,7 +78,7 @@ Models/
 ```
 
 ## 5. Generate Predictions for each model type
-Run scripts in `Code/1. Generate Predictions`. This will generate predictions in a new folder located at `SAMoSA/Preds`. This will generate the following.
+Run scripts in `Code/1. Generate Predictions`. This will generate predictions in a new folder located at `SAMoSA/Preds`, with the following structure.
 ```bash
 Preds/
 ├── Motion
