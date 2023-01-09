@@ -65,3 +65,7 @@ Models/
     ├── 1000
     └── 16000
 ```
+
+## 5. Generate Predictions for each model type
+Run scripts in `Code/1. Generate Predictions`. This will generate predictions in a new folder located at `SAMoSA/Preds`. 
+
