@@ -23,6 +23,7 @@ import pandas as pd
 from collections import defaultdict
 import pickle as pkl
 
+# +
 path_to_examples = Path("../../../Data/AudioExamples/")
 
 sub_srs = []
@@ -30,8 +31,10 @@ sub_srs = []
 for folder in path_to_examples.iterdir():
     sub_srs.append(folder.name)
 
-sub_srs
+print(sub_srs)
 
+
+# -
 
 def load_data(path_to_data, load_pids_set):
     X_audio = []
