@@ -60,9 +60,9 @@ For example:
 Participant ID: 49, Context: Kitchen, Activity: Chopping, TrialNo: 1
 
 Each pickle file has the `Audio` and `IMU` keys.  
-    - Audio contains a 1D array of audio data, sampled at 16kHz
-    - # IMU is a 2D array of (N\_Samples, 9 axes) Sampled at ~50Hz
-    - Refer to [this notebook]("Code/0. Dataset Intro.ipynb") for more information.
+    - `Audio` contains a 1D array of audio data, sampled at 16kHz. We have released all activities excluding speech at 16kHz. Speech is released at 1kHz.
+    - `IMU` is a 2D array of (N\_Samples, 9 axes) sampled at ~50Hz
+    - Refer to [this notebook]("Code/0.%20Dataset%20Intro.ipynb") and the paper for more information.
 
 ## 4. Download Models
 Download the `Models` folder from [UPDATE THIS LINK!](http://smashlab.io/pdfs/samosa.pdf) and place in `SAMoSA/Models`. It should have the following tree structure.
