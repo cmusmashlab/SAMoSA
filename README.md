@@ -44,3 +44,11 @@ conda install -c conda-forge cudatoolkit=10.2 cudnn=7.6
 python -m pip install -r requirements.txt
 ```
 
+## 3. Download Data
+Download the `Data` folder from [UPDATE THIS LINK!](http://smashlab.io/pdfs/samosa.pdf) and place in `SAMoSA/Data`. It should have the following tree structure.
+```bash
+Data/
+└── TrainingDataset
+```
+
+29 directories, 2 files
