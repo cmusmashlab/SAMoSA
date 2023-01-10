@@ -127,7 +127,7 @@ IN NO EVENT UNLESS REQUIRED BY APPLICABLE LAW THE AUTHOR WILL BE LIABLE TO YOU F
 ```
 
 ## License
-The dataset and code can only be used for research i.e., non-commercial purposes. For a commercial license, please contact Vimal Mollyn, Karan Ahuja and Mayank Goel and the CMU Technology Transfer Office (innovation@cmu.edu).
+The SAMoSA dataset and code can only be used for research i.e., non-commercial purposes. For a commercial license, please contact Vimal Mollyn, Karan Ahuja and Mayank Goel.
 
 ## Contact
 Feel free to contact [Vimal Mollyn](mailto:ms123vimal@gmail.com) for any help, questions or general feedback!
