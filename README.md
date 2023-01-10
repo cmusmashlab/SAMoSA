@@ -45,7 +45,7 @@ python -m pip install -r requirements.txt
 ```
 
 ## 3. Download Data
-Download the `Data` folder from [UPDATE THIS LINK!](http://smashlab.io/pdfs/samosa.pdf) and place in `SAMoSA/Data`. It should have the following tree structure.
+Download the `Data` folder from [here](https://www.dropbox.com/sh/kmv4y3mu7fx8oyp/AAAv1BmCAub00Alp-xPdlA5sa?dl=0) (2.88 GB) and place in `SAMoSA/Data`. 
 ```bash
 Data/
 └── TrainingDataset
@@ -59,22 +59,34 @@ For example:
 
 Participant ID: 49, Context: Kitchen, Activity: Chopping, TrialNo: 1
 
-Each pickle file has the `Audio` and `IMU` keys.  
-- `Audio` contains a 1D array of audio data, sampled at 16kHz. We release data for all activities excluding speech at 16kHz. Speech is released at 1kHz.
+Each pickle file has an `Audio` and `IMU` key. Speech (Other) activity files contain an additional `1kHz_Audio` key. 
+- `Audio` contains a 1D array of audio data, sampled at 16kHz. We release data for all activities excluding speech at 16kHz. Speech is released at 1kHz (.
 - `IMU` is a 2D array of (N\_Samples, 9 axes) sampled at ~50Hz.
+- `1kHz_Audio` is a 1D array of audio data, subsampled to 1kHz. Whenever this key is present, the `Audio` key contains an array of zeros with the same shape as the original 16kHz array.  
 - Refer to [this notebook](Code/0.%20Dataset%20Intro.ipynb) and the paper for more information.
 
 ## 4. Download Models
-Download the `Models` folder from [UPDATE THIS LINK!](http://smashlab.io/pdfs/samosa.pdf) and place in `SAMoSA/Models`. It should have the following tree structure. Note, to replicate results from the paper, you must download all 20 models from [here]().
+Download the `Models` folder from [here](https://www.dropbox.com/sh/ly2k47llynd4bl2/AACIqr9BCzmxsBbwS0xVML59a?dl=0) (2.46 GB) and place in `SAMoSA/Models`. It should have the following tree structure. Note, to replicate results from the paper, you must download all 20 models from [here](https://www.dropbox.com/sh/hc302qcid5nnkes/AADtsM5KeNTDrEX5TjLwA54oa?dl=0) (49.5 GB).
 ```bash
 Models/
 ├── Motion
+│   └── 17.h5
 ├── MotionSound
 │   ├── 1000
+│   │   └── 17
+│   │       ├── 17.h5
+│   │       ├── lb.pkl
+│   │       └── norm_params.pkl
 │   └── 16000
+│       └── 17
+│           ├── 17.h5
+│           ├── lb.pkl
+│           └── norm_params.pkl
 └── Sound
     ├── 1000
+    │   └── 17.h5
     └── 16000
+        └── 17.h5
 ```
 
 ## 5. Generate Predictions for each model type
@@ -96,8 +108,8 @@ Note, results from the paper are averaged across all 20 Leave-One-Participant-Ou
 - [Evaluation notebook for frame wise metrics](Code/3.%20Evaluate/2.%20Frame%20Wise%20metrics.ipynb)
 
 ## Annotator Web App
-The annotator web app that we used during data collection can be found [here](https://github.com/VimalMollyn/UserStudyAnnotator).
+The annotator app that we used during data collection can be found [here](https://github.com/VimalMollyn/UserStudyAnnotator).
 
-## TODO:
-- Include Real-Time demo scripts and visualizations
-- Include Android WatchOS App code 
+## Coming Soon!
+- Real-Time demos and visualizations
+- Android WearOS App for data collection and streaming
