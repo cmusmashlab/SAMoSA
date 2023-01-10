@@ -1,0 +1,7 @@
+**/.ipynb_checkpoints/
+**/__pycache__/
+Data/*
+Models/*
+Preds/*
+All Models/*
+All Data/*
