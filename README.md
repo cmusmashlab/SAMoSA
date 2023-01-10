@@ -102,7 +102,7 @@ Preds/
     └── 16000
 ```
 
-## 6. Run Evaluation notebooks from `Code/3. Evaluate`
+## 6. Run Evaluation notebooks 
 Note, results from the paper are averaged across all 20 Leave-One-Participant-Out (LOPO) cross validation folds.
 - [Evaluation notebook for context wise metrics](Code/3.%20Evaluate/1.%20Context%20Wise%20results.ipynb)
 - [Evaluation notebook for frame wise metrics](Code/3.%20Evaluate/2.%20Frame%20Wise%20metrics.ipynb)
