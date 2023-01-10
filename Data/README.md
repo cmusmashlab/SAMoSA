@@ -17,5 +17,5 @@ Each pickle file has an `Audio` and `IMU` key. Speech (Other) activity files con
 - `Audio` contains a 1D array of audio data, sampled at 16kHz. We release data for all activities excluding speech at 16kHz. Speech is released at 1kHz (.
 - `IMU` is a 2D array of (N\_Samples, 9 axes) sampled at ~50Hz.
 - `1kHz_Audio` is a 1D array of audio data, subsampled to 1kHz. Whenever this key is present, the `Audio` key contains an array of zeros with the same shape as the original 16kHz array.  
-- Refer to [this notebook](Code/0.%20Dataset%20Intro.ipynb) and the paper for more information.
+- Refer to [this notebook](../Code/0.%20Dataset%20Intro.ipynb) and the paper for more information.
 
