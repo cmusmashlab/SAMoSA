@@ -2,6 +2,8 @@
 **/__pycache__/
 Data/*
 Models/*
+!Data/README.md
+!Models/README.md
 Preds/*
 All Models/*
 All Data/*
