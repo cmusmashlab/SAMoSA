@@ -65,7 +65,7 @@ Each pickle file has the `Audio` and `IMU` keys.
 - Refer to [this notebook](Code/0.%20Dataset%20Intro.ipynb) and the paper for more information.
 
 ## 4. Download Models
-Download the `Models` folder from [UPDATE THIS LINK!](http://smashlab.io/pdfs/samosa.pdf) and place in `SAMoSA/Models`. It should have the following tree structure.
+Download the `Models` folder from [UPDATE THIS LINK!](http://smashlab.io/pdfs/samosa.pdf) and place in `SAMoSA/Models`. It should have the following tree structure. Note, to replicate results from the paper, you must download all 20 models from [here]().
 ```bash
 Models/
 ├── Motion
@@ -89,3 +89,15 @@ Preds/
     ├── 1000
     └── 16000
 ```
+
+## 6. Run Evaluation notebooks from `Code/3. Evaluate`
+Note, results from the paper are averaged across all 20 Leave-One-Participant-Out (LOPO) cross validation folds.
+- [Evaluation notebook for context wise metrics](Code/3.%20Evaluate/1.%20Context%20Wise%20results.ipynb)
+- [Evaluation notebook for frame wise metrics](Code/3.%20Evaluate/2.%20Frame%20Wise%20metrics.ipynb)
+
+## Annotator Web App
+The annotator web app that we used during data collection can be found [here](https://github.com/VimalMollyn/UserStudyAnnotator).
+
+## TODO:
+- Include Real-Time demo scripts and visualizations
+- Include Android WatchOS App code 
