@@ -4,7 +4,7 @@ Research code for SAMoSA: Sensing Activities with Motion and Subsampled Audio (U
 
 <p align="center">
   <img src="Media/SAMoSA_a.gif" alt="animated" width="100%"/>
-  <img src="Media/SAMoSA_b.gif" alt="animated" />
+  <img src="Media/SAMoSA_b.gif" alt="animated" width="100%"/>
 </p>
 
 ## Reference
