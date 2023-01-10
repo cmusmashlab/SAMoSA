@@ -229,61 +229,63 @@ for sr in sub_srs:
         
         model_name = '_'.join(test_pids_set)
         path_to_model = path_to_models / sr / f"{model_name}/{model_name}.h5"
-        multimodal_model = tf.keras.models.load_model(path_to_model)
 
-        with open(path_to_model.parent / "norm_params.pkl", "rb") as f:
-            normalization_params = pkl.load(f)
-        X_train_imu, X_train_audio, y_train = load_data(path_to_mm_data, train_pids_set, normalization_params=normalization_params)
-        X_val_imu, X_val_audio, y_val = load_data(path_to_mm_data, val_pids_set, normalization_params=normalization_params)
+        if path_to_model.exists():
+            multimodal_model = tf.keras.models.load_model(path_to_model)
 
-        print(X_train_imu.shape, X_train_audio.shape, y_train.shape)
-        print(X_val_imu.shape, X_val_audio.shape, y_val.shape)
+            with open(path_to_model.parent / "norm_params.pkl", "rb") as f:
+                normalization_params = pkl.load(f)
+            X_train_imu, X_train_audio, y_train = load_data(path_to_mm_data, train_pids_set, normalization_params=normalization_params)
+            X_val_imu, X_val_audio, y_val = load_data(path_to_mm_data, val_pids_set, normalization_params=normalization_params)
 
-        y_train_df = y_train
-        y_val_df = y_val
+            print(X_train_imu.shape, X_train_audio.shape, y_train.shape)
+            print(X_val_imu.shape, X_val_audio.shape, y_val.shape)
 
-        Y_train_activity = y_train_df["Activity"]
-        Y_val_activity = y_val_df["Activity"]
+            y_train_df = y_train
+            y_val_df = y_val
 
-        lb = LabelBinarizer()
-        Y_train_activity_lbl = lb.fit_transform(Y_train_activity)
-        Y_val_activity_lbl = lb.transform(Y_val_activity)
+            Y_train_activity = y_train_df["Activity"]
+            Y_val_activity = y_val_df["Activity"]
 
-        results_df = get_mean_filewise_acc(multimodal_model, test_pids_set, path_to_data=path_to_mm_data,
-                                   labelBinarizer=lb, normalization_params=normalization_params, return_df=True)
+            lb = LabelBinarizer()
+            Y_train_activity_lbl = lb.fit_transform(Y_train_activity)
+            Y_val_activity_lbl = lb.transform(Y_val_activity)
 
-        results_df["y_pred"] = results_df.drop(columns=["file_name"]).idxmax(axis=1)
-        results_df["y_true"] = results_df["file_name"].str.split("---").str[2]
-        ba_framewise = balanced_accuracy_score(results_df["y_true"], results_df["y_pred"])
-        f1_framewise = f1_score(results_df["y_true"], results_df["y_pred"], average="weighted")
+            results_df = get_mean_filewise_acc(multimodal_model, test_pids_set, path_to_data=path_to_mm_data,
+                                       labelBinarizer=lb, normalization_params=normalization_params, return_df=True)
 
-        file_preds = []
-        for name, group in results_df.groupby(["file_name"]):
-            preds = group.drop(columns = ["file_name", "y_pred", "y_true"])
-            file_pred = preds.sum(axis=0).idxmax(axis=0)
-            file_true = group["y_true"].values[0]
+            results_df["y_pred"] = results_df.drop(columns=["file_name"]).idxmax(axis=1)
+            results_df["y_true"] = results_df["file_name"].str.split("---").str[2]
+            ba_framewise = balanced_accuracy_score(results_df["y_true"], results_df["y_pred"])
+            f1_framewise = f1_score(results_df["y_true"], results_df["y_pred"], average="weighted")
 
-            file_preds.append([file_true, file_pred])
-        file_preds = pd.DataFrame(file_preds, columns=["file_true", "file_pred"])
+            file_preds = []
+            for name, group in results_df.groupby(["file_name"]):
+                preds = group.drop(columns = ["file_name", "y_pred", "y_true"])
+                file_pred = preds.sum(axis=0).idxmax(axis=0)
+                file_true = group["y_true"].values[0]
 
-        ba_filewise = balanced_accuracy_score(file_preds["file_true"], file_preds["file_pred"])
-        f1_filewise = f1_score(file_preds["file_true"], file_preds["file_pred"], average="weighted")
+                file_preds.append([file_true, file_pred])
+            file_preds = pd.DataFrame(file_preds, columns=["file_true", "file_pred"])
 
-        print(f'{"_".join(test_pids_set)}, {"_".join(val_pids_set)}, {ba_framewise}, {f1_framewise}, {ba_filewise}, {f1_filewise}')
+            ba_filewise = balanced_accuracy_score(file_preds["file_true"], file_preds["file_pred"])
+            f1_filewise = f1_score(file_preds["file_true"], file_preds["file_pred"], average="weighted")
 
-        # save predictions
-        path_to_save_preds = path_to_preds / f"{sub_sr}"
-        path_to_save_preds.mkdir(exist_ok=True, parents=True)
-        results_df.to_csv(path_to_save_preds/f'{"_".join(test_pids_set)}.csv', index=False)
+            print(f'{"_".join(test_pids_set)}, {"_".join(val_pids_set)}, {ba_framewise}, {f1_framewise}, {ba_filewise}, {f1_filewise}')
 
-        # clear session
-        K.clear_session()
+            # save predictions
+            path_to_save_preds = path_to_preds / f"{sub_sr}"
+            path_to_save_preds.mkdir(exist_ok=True, parents=True)
+            results_df.to_csv(path_to_save_preds/f'{"_".join(test_pids_set)}.csv', index=False)
 
-        # delete all the unused vars
-        del multimodal_model
-        del X_train_audio, X_train_imu, y_train_df
-        del X_val_audio, X_val_imu, y_val_df
-        gc.collect()
+            # clear session
+            K.clear_session()
+
+            # delete all the unused vars
+            del multimodal_model
+            del X_train_audio, X_train_imu, y_train_df
+            del X_val_audio, X_val_imu, y_val_df
+            gc.collect()
 
         # end
         pids_set = np.roll(pids_set, 1)  # roll the array for cross validation

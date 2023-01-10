@@ -140,52 +140,53 @@ for sr in sub_srs:
         train_pids_set, val_pids_set, test_pids_set = get_train_val_test_pids(pids_set, split=[18, 1, 1])
 
         path_to_model = path_to_models / sr / f"{'_'.join(test_pids_set)}.h5"
-        final_model = tf.keras.models.load_model(path_to_model)
-        
-        # load data
-        X_train_audio_concat, y_train_df = load_data(path_to_data, train_pids_set)
-        X_val_audio_concat, y_val_df = load_data(path_to_data, val_pids_set)
+        if path_to_model.exists():
+            final_model = tf.keras.models.load_model(path_to_model)
+            
+            # load data
+            X_train_audio_concat, y_train_df = load_data(path_to_data, train_pids_set)
+            X_val_audio_concat, y_val_df = load_data(path_to_data, val_pids_set)
 
-        Y_train_activity = y_train_df["Activity"]
-        Y_val_activity = y_val_df["Activity"]
+            Y_train_activity = y_train_df["Activity"]
+            Y_val_activity = y_val_df["Activity"]
 
-        lb = LabelBinarizer()
-        Y_train_activity_lbl = lb.fit_transform(Y_train_activity)
-        Y_val_activity_lbl = lb.transform(Y_val_activity)
+            lb = LabelBinarizer()
+            Y_train_activity_lbl = lb.fit_transform(Y_train_activity)
+            Y_val_activity_lbl = lb.transform(Y_val_activity)
 
-        # save results to file
-        results_df = get_mean_filewise_acc(final_model, test_pids_set, path_to_data=path_to_data,
-                                           labelBinarizer=lb, return_df=True)
+            # save results to file
+            results_df = get_mean_filewise_acc(final_model, test_pids_set, path_to_data=path_to_data,
+                                               labelBinarizer=lb, return_df=True)
 
-        results_df["y_pred"] = results_df.drop(columns=["file_name"]).idxmax(axis=1)
-        results_df["y_true"] = results_df["file_name"].str.split("---").str[2]
-        ba_framewise = balanced_accuracy_score(results_df["y_true"], results_df["y_pred"])
-        f1_framewise = f1_score(results_df["y_true"], results_df["y_pred"], average="weighted")
+            results_df["y_pred"] = results_df.drop(columns=["file_name"]).idxmax(axis=1)
+            results_df["y_true"] = results_df["file_name"].str.split("---").str[2]
+            ba_framewise = balanced_accuracy_score(results_df["y_true"], results_df["y_pred"])
+            f1_framewise = f1_score(results_df["y_true"], results_df["y_pred"], average="weighted")
 
-        file_preds = []
-        for name, group in results_df.groupby(["file_name"]):
-            preds = group.drop(columns = ["file_name", "y_pred", "y_true"])
-            file_pred = preds.sum(axis=0).idxmax(axis=0)
-            file_true = group["y_true"].values[0]
+            file_preds = []
+            for name, group in results_df.groupby(["file_name"]):
+                preds = group.drop(columns = ["file_name", "y_pred", "y_true"])
+                file_pred = preds.sum(axis=0).idxmax(axis=0)
+                file_true = group["y_true"].values[0]
 
-            file_preds.append([file_true, file_pred])
-        file_preds = pd.DataFrame(file_preds, columns=["file_true", "file_pred"])
+                file_preds.append([file_true, file_pred])
+            file_preds = pd.DataFrame(file_preds, columns=["file_true", "file_pred"])
 
-        ba_filewise = balanced_accuracy_score(file_preds["file_true"], file_preds["file_pred"])
-        f1_filewise = f1_score(file_preds["file_true"], file_preds["file_pred"], average="weighted")
+            ba_filewise = balanced_accuracy_score(file_preds["file_true"], file_preds["file_pred"])
+            f1_filewise = f1_score(file_preds["file_true"], file_preds["file_pred"], average="weighted")
 
-        print(f'{"_".join(test_pids_set)}, {"_".join(val_pids_set)}, {ba_framewise}, {f1_framewise}, {ba_filewise}, {f1_filewise}')
+            print(f'{"_".join(test_pids_set)}, {"_".join(val_pids_set)}, {ba_framewise}, {f1_framewise}, {ba_filewise}, {f1_filewise}')
 
-        # save predictions
-        path_to_save_preds = path_to_preds / f"{sub_sampling_rate}"
-        path_to_save_preds.mkdir(exist_ok=True, parents=True)
-        results_df.to_csv(path_to_save_preds/f'{"_".join(test_pids_set)}.csv', index=False)
+            # save predictions
+            path_to_save_preds = path_to_preds / f"{sub_sampling_rate}"
+            path_to_save_preds.mkdir(exist_ok=True, parents=True)
+            results_df.to_csv(path_to_save_preds/f'{"_".join(test_pids_set)}.csv', index=False)
 
-        K.clear_session()
-        del final_model
-        del X_train_audio_concat, y_train_df
-        del X_val_audio_concat, y_val_df
-        gc.collect()
+            K.clear_session()
+            del final_model
+            del X_train_audio_concat, y_train_df
+            del X_val_audio_concat, y_val_df
+            gc.collect()
 
         # end
         pids_set = np.roll(pids_set, 1)  # roll the array for cross validation

@@ -198,71 +198,72 @@ def get_mean_filewise_acc(loc_model, test_pids, labelBinarizer=None,
 for _ in pids_set:
     train_pids_set, val_pids_set, test_pids_set = get_train_val_test_pids(pids_set, split=[18, 1, 1])
 
-    normalization_params = get_normalization_params(path_to_raw_imu, train_pids_set)
-    X_train_imu, y_train = load_data(path_to_raw_imu, train_pids_set, normalization_params)
-    X_val_imu, y_val = load_data(path_to_raw_imu, val_pids_set, normalization_params)
-
-    y_train_df = y_train
-    y_val_df = y_val
-
-    Y_train_activity = y_train_df["Activity"]
-    Y_val_activity = y_val_df["Activity"]
-
-    lb = LabelBinarizer()
-    Y_train_activity_lbl = lb.fit_transform(Y_train_activity)
-    Y_val_activity_lbl = lb.transform(Y_val_activity)
-
-    train_class_weights = compute_class_weight("balanced", classes=sorted(np.unique(Y_train_activity)),
-                                               y=Y_train_activity)
-
-    # get train sample weights
-    train_sample_weights = np.zeros((len(Y_train_activity)))
-    classes = sorted(np.unique(Y_train_activity))
-
-    for i, class_label in enumerate(classes):
-        train_sample_weights[Y_train_activity == class_label] = train_class_weights[i]
-
     # load the model
     path_to_model = path_to_motion_models / f'{"_".join(test_pids_set)}.h5'
-    
-    model = tf.keras.models.load_model(path_to_model)
 
-    # save results to file
-    results_df = get_mean_filewise_acc(model, test_pids_set, path_to_preprocessed_data=path_to_raw_imu,
-                                       labelBinarizer=lb, normalization_params=normalization_params, return_df=True)
-    
-    results_df["y_pred"] = results_df.drop(columns=["file_name"]).idxmax(axis=1)
-    results_df["y_true"] = results_df["file_name"].str.split("---").str[2]
-    ba_framewise = balanced_accuracy_score(results_df["y_true"], results_df["y_pred"])
-    f1_framewise = f1_score(results_df["y_true"], results_df["y_pred"], average="weighted")
-    
-    file_preds = []
-    for name, group in results_df.groupby(["file_name"]):
-        preds = group.drop(columns = ["file_name", "y_pred", "y_true"])
-        file_pred = preds.sum(axis=0).idxmax(axis=0)
-        file_true = group["y_true"].values[0]
+    if path_to_model.exists():
+        normalization_params = get_normalization_params(path_to_raw_imu, train_pids_set)
+        X_train_imu, y_train = load_data(path_to_raw_imu, train_pids_set, normalization_params)
+        X_val_imu, y_val = load_data(path_to_raw_imu, val_pids_set, normalization_params)
 
-        file_preds.append([file_true, file_pred])
-    file_preds = pd.DataFrame(file_preds, columns=["file_true", "file_pred"])
+        y_train_df = y_train
+        y_val_df = y_val
 
-    ba_filewise = balanced_accuracy_score(file_preds["file_true"], file_preds["file_pred"])
-    f1_filewise = f1_score(file_preds["file_true"], file_preds["file_pred"], average="weighted")
-    
-    print(f'{"_".join(test_pids_set)}, {"_".join(val_pids_set)}, {ba_framewise}, {f1_framewise}, {ba_filewise}, {f1_filewise}')
+        Y_train_activity = y_train_df["Activity"]
+        Y_val_activity = y_val_df["Activity"]
+
+        lb = LabelBinarizer()
+        Y_train_activity_lbl = lb.fit_transform(Y_train_activity)
+        Y_val_activity_lbl = lb.transform(Y_val_activity)
+
+        train_class_weights = compute_class_weight("balanced", classes=sorted(np.unique(Y_train_activity)),
+                                                   y=Y_train_activity)
+
+        # get train sample weights
+        train_sample_weights = np.zeros((len(Y_train_activity)))
+        classes = sorted(np.unique(Y_train_activity))
+
+        for i, class_label in enumerate(classes):
+            train_sample_weights[Y_train_activity == class_label] = train_class_weights[i]
+
         
-    # save predictions
-    results_df.to_csv(path_to_save_preds/f'{"_".join(test_pids_set)}.csv', index=False)
+        model = tf.keras.models.load_model(path_to_model)
 
-    # clear session
-    K.clear_session()
+        # save results to file
+        results_df = get_mean_filewise_acc(model, test_pids_set, path_to_preprocessed_data=path_to_raw_imu,
+                                           labelBinarizer=lb, normalization_params=normalization_params, return_df=True)
+        
+        results_df["y_pred"] = results_df.drop(columns=["file_name"]).idxmax(axis=1)
+        results_df["y_true"] = results_df["file_name"].str.split("---").str[2]
+        ba_framewise = balanced_accuracy_score(results_df["y_true"], results_df["y_pred"])
+        f1_framewise = f1_score(results_df["y_true"], results_df["y_pred"], average="weighted")
+        
+        file_preds = []
+        for name, group in results_df.groupby(["file_name"]):
+            preds = group.drop(columns = ["file_name", "y_pred", "y_true"])
+            file_pred = preds.sum(axis=0).idxmax(axis=0)
+            file_true = group["y_true"].values[0]
+
+            file_preds.append([file_true, file_pred])
+        file_preds = pd.DataFrame(file_preds, columns=["file_true", "file_pred"])
+
+        ba_filewise = balanced_accuracy_score(file_preds["file_true"], file_preds["file_pred"])
+        f1_filewise = f1_score(file_preds["file_true"], file_preds["file_pred"], average="weighted")
+        
+        print(f'{"_".join(test_pids_set)}, {"_".join(val_pids_set)}, {ba_framewise}, {f1_framewise}, {ba_filewise}, {f1_filewise}')
+            
+        # save predictions
+        results_df.to_csv(path_to_save_preds/f'{"_".join(test_pids_set)}.csv', index=False)
+
+        # clear session
+        K.clear_session()
+
+        # delete all the unused vars
+        del model
+        del X_train_imu, y_train_df
+        del X_val_imu, y_val_df
+        gc.collect()
 
     # end
     pids_set = np.roll(pids_set, 1)  # roll the array for cross validation
-
-    # delete all the unused vars
-    del model
-    del X_train_imu, y_train_df
-    del X_val_imu, y_val_df
-    gc.collect()
-
 
