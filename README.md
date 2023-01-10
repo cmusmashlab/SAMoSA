@@ -3,11 +3,9 @@
 Research code for SAMoSA: Sensing Activities with Motion and Subsampled Audio (Ubicomp/IMWUT 2022).
 
 <p align="center">
-  <img src="Media/SAMoSA_a.gif" alt="animated" />
+  <img src="Media/SAMoSA_a.gif" alt="animated" width="100%"/>
   <img src="Media/SAMoSA_b.gif" alt="animated" />
 </p>
-![](Media/SAMoSA_a.gif)
-![](Media/SAMoSA_b.gif)
 
 ## Reference
 Vimal Mollyn, Karan Ahuja, Dhruv Verma, Chris Harrison, and Mayank Goel. 2022. SAMoSA: Sensing Activities with Motion and Subsampled Audio. Proc. ACM Interact. Mob. Wearable Ubiquitous Technol. 6, 3, Article 132 (September 2022), 19 pages. 
