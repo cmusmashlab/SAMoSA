@@ -115,9 +115,11 @@ Note, results from the paper are averaged across all 20 Leave-One-Participant-Ou
 ## Annotator Web App
 The annotator app that we used during data collection can be found [here](https://github.com/VimalMollyn/UserStudyAnnotator).
 
+## Android WearOS App for data collection and streaming
+Download the Sensor Streamer app [here](https://github.com/VimalMollyn/SensorStreamerWearOS)!
+
 ## Coming Soon!
 - Real-Time demos and visualizations
-- Android WearOS App for data collection and streaming
 
 ## Disclaimer
 ```
